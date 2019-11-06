@@ -1,0 +1,374 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Scenario server."
+  version: "1.0.0"
+  title: "Swagger Scenario"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "scenario.swagger.io"
+basePath: "/v2"
+tags:
+- name: "scenario"
+  description: "Everything about your Scenarios"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+schemes:
+- "https"
+- "http"
+paths:
+  /scenario:
+    post:
+      tags:
+      - "scenario"
+      summary: "Add a new scenario to the system"
+      description: ""
+      operationId: "addScenario"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Scenario object that needs to be added to the system"
+        required: true
+        schema:
+          $ref: "#/definitions/Scenario"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - scenariostore_auth:
+        - "write:scenarios"
+        - "read:scenarios"
+    put:
+      tags:
+      - "scenario"
+      summary: "Update an existing scenario"
+      description: ""
+      operationId: "updateScenario"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Scenario object that needs to be added to the system"
+        required: true
+        schema:
+          $ref: "#/definitions/Scenario"
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Scenario not found"
+        405:
+          description: "Validation exception"
+      security:
+      - scenariostore_auth:
+        - "write:scenarios"
+        - "read:scenarios"
+  /scenario/all:
+    get:
+      tags:
+      - "scenario"
+      summary: "Finds all Scenarios"
+      description: "return all scenarios"
+      operationId: "findAllScenarios"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Scenario"
+        400:
+          description: "Invalid status value"
+      security:
+      - scenariostore_auth:
+        - "write:scenarios"
+        - "read:scenarios"
+  /scenario/findByStatus:
+    get:
+      tags:
+      - "scenario"
+      summary: "Finds Scenarios by status"
+      description: "Multiple status values can be provided with comma separated strings"
+      operationId: "findScenariosByStatus"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "status"
+        in: "query"
+        description: "Status values that need to be considered for filter"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+          enum:
+          - "available"
+          - "pending"
+          - "sold"
+          default: "available"
+        collectionFormat: "multi"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Scenario"
+        400:
+          description: "Invalid status value"
+      security:
+      - scenariostore_auth:
+        - "write:scenarios"
+        - "read:scenarios"
+  /scenario/findByTags:
+    get:
+      tags:
+      - "scenario"
+      summary: "Finds Scenarios by tags"
+      description: "Muliple tags can be provided with comma separated strings. Use         tag1, tag2, tag3 for testing."
+      operationId: "findScenariosByTags"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "tags"
+        in: "query"
+        description: "Tags to filter by"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Scenario"
+        400:
+          description: "Invalid tag value"
+      security:
+      - scenariostore_auth:
+        - "write:scenarios"
+        - "read:scenarios"
+      deprecated: true
+  /scenario/{scenarioId}:
+    get:
+      tags:
+      - "scenario"
+      summary: "Find scenario by ID"
+      description: "Returns a single scenario"
+      operationId: "getScenarioById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "scenarioId"
+        in: "path"
+        description: "ID of scenario to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Scenario"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Scenario not found"
+      security:
+      - api_key: []
+    post:
+      tags:
+      - "scenario"
+      summary: "Updates a scenario in the store with form data"
+      description: ""
+      operationId: "updateScenarioWithForm"
+      consumes:
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "scenarioId"
+        in: "path"
+        description: "ID of scenario that needs to be updated"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "name"
+        in: "formData"
+        description: "Updated name of the scenario"
+        required: false
+        type: "string"
+      - name: "status"
+        in: "formData"
+        description: "Updated status of the scenario"
+        required: false
+        type: "string"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - scenariostore_auth:
+        - "write:scenarios"
+        - "read:scenarios"
+    delete:
+      tags:
+      - "scenario"
+      summary: "Deletes a scenario"
+      description: ""
+      operationId: "deleteScenario"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "api_key"
+        in: "header"
+        required: false
+        type: "string"
+      - name: "scenarioId"
+        in: "path"
+        description: "Scenario id to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Scenario not found"
+      security:
+      - scenariostore_auth:
+        - "write:scenarios"
+        - "read:scenarios"
+securityDefinitions:
+  scenariostore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:scenarios: "modify scenarios in your account"
+      read:scenarios: "read your scenarios"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Category:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+    xml:
+      name: "Category"
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+      userStatus:
+        type: "integer"
+        format: "int32"
+        description: "User Status"
+    xml:
+      name: "User"
+  Tag:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+    xml:
+      name: "Tag"
+  Scenario:
+    type: "object"
+    required:
+    - "name"
+    - "photoUrls"
+    properties:
+      id:
+        type: "string"
+        example: "1"
+      author:
+        $ref: "#/definitions/User"
+      category:
+        $ref: "#/definitions/Category"
+      name:
+        type: "string"
+        example: "doggie"
+      createdDate:
+        type: "string"
+        format: "date-time"
+        example: "2017-07-21T17:32:28Z"
+      lastModified:
+        type: "string"
+        format: "date-time"
+        example: "2017-07-21T17:32:28Z"
+      temporalHorizon:
+        type: "string"
+        format: "date-time"
+        example: "2017-07-21T17:32:28Z"
+      tags:
+        type: "array"
+        xml:
+          name: "tag"
+          wrapped: true
+        items:
+          $ref: "#/definitions/Tag"
+      status:
+        type: "string"
+        description: "scenario status in the store"
+        enum:
+        - "available"
+        - "ready"
+    xml:
+      name: "Scenario"
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

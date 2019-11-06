@@ -1,0 +1,77 @@
+<server description="sampleApiServer">
+	<!-- Enable features -->
+	<featureManager>
+		<feature>webProfile-8.0</feature>
+		<feature>transportSecurity-1.0</feature>
+		<feature>mpJwt-1.1</feature>
+		<feature>json-1.0</feature>
+	</featureManager>
+
+	<!-- http end point -->
+	<httpEndpoint httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint" />
+	
+	<!-- DB2 JDBC Driver -->
+	<jdbcDriver id="DB2Driver">
+		<library>
+			<fileset includes="db2jcc4.jar" dir="${server.config.dir}/lib" />
+		</library>
+	</jdbcDriver>
+	
+	<!-- default key store -->
+	<keyStore id="defaultKeyStore" password="secret" />
+	
+	<!-- Disable cache and ltpa cookie to ensure require Authentication header in every request -->
+	<authentication cacheEnabled="false"></authentication>
+	<webAppSecurity singleSignonEnabled="false" ></webAppSecurity>
+	
+	<!-- Logging configure -->
+	<logging consoleLogLevel="INFO" consoleFormat="basic"></logging>
+	
+	<applicationMonitor updateTrigger="mbean" />
+
+	<!-- API War -->
+	<webApplication id="spo_api" location="spo_api.war" name="spo_api" contextRoot="/ibm/spo/api/v1">
+		<web-bnd>
+			<env-entry name="TenantConfigFolder" value="${server.config.dir}/tenants"></env-entry>
+			<env-entry name="ConfigDropinFolder" value="${server.config.dir}/configDropins/overrides"></env-entry>
+		</web-bnd>
+		<!-- Ensure one-one mapping to group and roles -->
+		<application-bnd>
+			<security-role name="VM_EndUser">
+				<group access-id="VM_EndUser" name="VM_EndUser"></group>
+			</security-role>
+			<security-role name="VM_DataEngineer">
+				<group access-id="VM_DataEngineer" name="VM_DataEngineer"></group>
+			</security-role>
+			<security-role name="VM_DataScientist">
+				<group access-id="VM_DataScientist" name="VM_DataScientist"></group>
+			</security-role>
+		</application-bnd>
+	</webApplication>
+
+
+	
+	
+
+
+	<!-- For local test Only, use realm name as tenant id, use group for roles -->
+	<basicRegistry realm="tenant1">
+		<user name="user1" password="passw0rd"></user>
+		<user name="user2" password="passw0rd"></user>
+		<user name="user3" password="passw0rd"></user>
+		<user name="user4" password="passw0rd"></user>
+		
+		<group name="VM_EndUser">
+			<member name="user1"></member>
+		</group>
+		<group name="VM_DataScientist">
+			<member name="user2"></member>
+			<member name="user1"></member>
+		</group>
+		<group name="VM_DataEngineer">
+			<member name="user3"></member>
+			<member name="user1"></member>
+		</group>
+	</basicRegistry>
+	
+</server>
