@@ -649,7 +649,8 @@
       "required" : [ "name" ],
       "properties" : {
         "id" : {
-          "type" : "string"
+          "type" : "integer",
+          "format" : "int64"
         },
         "author" : {
           "$ref" : "#/definitions/User"
@@ -700,10 +701,12 @@
       "type" : "object",
       "properties" : {
         "id_nda" : {
-          "type" : "string"
+          "type" : "integer",
+          "format" : "int64"
         },
         "asset_oid" : {
-          "type" : "string"
+          "type" : "integer",
+          "format" : "int64"
         },
         "asset_name" : {
           "type" : "string",

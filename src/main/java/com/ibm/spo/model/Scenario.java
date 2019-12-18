@@ -63,7 +63,7 @@ public enum StatusEnum {
   }
 
   
-  @ApiModelProperty(example = "1", value = "")
+  @ApiModelProperty(example = "null", value = "")
   public String getId() {
     return id;
   }

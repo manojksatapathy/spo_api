@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "This is a sample server Scenario server."
-  version: "1.0.1"
+  version: "1.0.0"
   title: "Swagger Scenario"
   termsOfService: "http://swagger.io/terms/"
   contact:
@@ -13,11 +13,6 @@ host: "scenario.swagger.io"
 basePath: "/v2"
 tags:
 - name: "scenario"
-  description: "Everything about your Scenarios"
-  externalDocs:
-    description: "Find out more"
-    url: "http://swagger.io"
-- name: "nda"
   description: "Everything about your Scenarios"
   externalDocs:
     description: "Find out more"
@@ -268,248 +263,6 @@ paths:
       - scenariostore_auth:
         - "write:scenarios"
         - "read:scenarios"
-  /nda:
-    post:
-      tags:
-      - "nda"
-      summary: "Add a new nda to the system"
-      description: ""
-      operationId: "addNda"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "NDA object that needs to be added to the system"
-        required: true
-        schema:
-          $ref: "#/definitions/NDA"
-      responses:
-        405:
-          description: "Invalid input"
-      security:
-      - ndastore_auth:
-        - "write:ndas"
-        - "read:ndas"
-    put:
-      tags:
-      - "nda"
-      summary: "Update an existing nda"
-      description: ""
-      operationId: "updateNda"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Nda object that needs to be added to the system"
-        required: true
-        schema:
-          $ref: "#/definitions/NDA"
-      responses:
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Nda not found"
-        405:
-          description: "Validation exception"
-      security:
-      - ndastore_auth:
-        - "write:ndas"
-        - "read:ndas"
-  /nda/all:
-    get:
-      tags:
-      - "nda"
-      summary: "Finds all Nda"
-      description: "return all Nda"
-      operationId: "findAllNda"
-      produces:
-      - "application/xml"
-      - "application/json"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/NDA"
-        400:
-          description: "Invalid status value"
-      security:
-      - ndastore_auth:
-        - "write:ndas"
-        - "read:ndas"
-  /nda/findByStatus:
-    get:
-      tags:
-      - "nda"
-      summary: "Finds Ndas by status"
-      description: "Multiple status values can be provided with comma separated strings"
-      operationId: "findNdaByStatus"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "status"
-        in: "query"
-        description: "Status values that need to be considered for filter"
-        required: true
-        type: "array"
-        items:
-          type: "string"
-          enum:
-          - "available"
-          - "pending"
-          - "sold"
-          default: "available"
-        collectionFormat: "multi"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/NDA"
-        400:
-          description: "Invalid status value"
-      security:
-      - ndastore_auth:
-        - "write:ndas"
-        - "read:ndas"
-  /nda/findByTags:
-    get:
-      tags:
-      - "nda"
-      summary: "Finds Ndas by tags"
-      description: "Muliple tags can be provided with comma separated strings. Use         tag1, tag2, tag3 for testing."
-      operationId: "findNdaByTags"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "tags"
-        in: "query"
-        description: "Tags to filter by"
-        required: true
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/NDA"
-        400:
-          description: "Invalid tag value"
-      security:
-      - ndastore_auth:
-        - "write:ndas"
-        - "read:ndas"
-      deprecated: true
-  /nda/{ndaId}:
-    get:
-      tags:
-      - "nda"
-      summary: "Find Nda by ID"
-      description: "Returns a single Nda"
-      operationId: "getNdaById"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "ndaId"
-        in: "path"
-        description: "ID of scenario to return"
-        required: true
-        type: "integer"
-        format: "int64"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Scenario"
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Scenario not found"
-      security:
-      - api_key: []
-    post:
-      tags:
-      - "nda"
-      summary: "Updates a nda in the store with form data"
-      description: ""
-      operationId: "updateNdaWithForm"
-      consumes:
-      - "application/x-www-form-urlencoded"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "ndaId"
-        in: "path"
-        description: "ID of nda that needs to be updated"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "name"
-        in: "formData"
-        description: "Updated name of the nda"
-        required: false
-        type: "string"
-      - name: "status"
-        in: "formData"
-        description: "Updated status of the nda"
-        required: false
-        type: "string"
-      responses:
-        405:
-          description: "Invalid input"
-      security:
-      - ndastore_auth:
-        - "write:ndas"
-        - "read:ndas"
-    delete:
-      tags:
-      - "nda"
-      summary: "Deletes a nda"
-      description: ""
-      operationId: "deleteNda"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "api_key"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "ndaId"
-        in: "path"
-        description: "Scenario id to delete"
-        required: true
-        type: "integer"
-        format: "int64"
-      responses:
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Nda not found"
-      security:
-      - ndastore_auth:
-        - "write:ndas"
-        - "read:ndas"
 securityDefinitions:
   scenariostore_auth:
     type: "oauth2"
@@ -518,13 +271,6 @@ securityDefinitions:
     scopes:
       write:scenarios: "modify scenarios in your account"
       read:scenarios: "read your scenarios"
-  ndastore_auth:
-    type: "oauth2"
-    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
-    flow: "implicit"
-    scopes:
-      write:ndas: "modify ndas in your account"
-      read:ndas: "read your ndas"
   api_key:
     type: "apiKey"
     name: "api_key"
@@ -578,6 +324,7 @@ definitions:
     properties:
       id:
         type: "string"
+        example: "1"
       author:
         $ref: "#/definitions/User"
       category:
@@ -610,56 +357,6 @@ definitions:
         enum:
         - "available"
         - "ready"
-    xml:
-      name: "Scenario"
-  NDA:
-    type: "object"
-    required:
-    - "name"
-    - "photoUrls"
-    properties:
-      id:
-        type: "string"
-      id_nda:
-        type: "string"
-      asset_oid:
-        type: "string"
-      asset_name:
-        type: "string"
-        example: "doggie"
-      asset_mrid:
-        type: "string"
-        example: "doggie"
-      asset_ds:
-        type: "string"
-        example: "doggie"
-      asset_type:
-        type: "string"
-        example: "doggie"
-      asset_type_ds:
-        type: "string"
-        example: "doggie"
-      substation:
-        type: "string"
-      maintenanceArea:
-        type: "string"
-      geographicalArea:
-        type: "string"
-      nda_type:
-        type: "string"
-      nda_type_ds:
-        type: "string"
-      status:
-        type: "string"
-        example: "AC"
-      startDate:
-        type: "string"
-        format: "date-time"
-        example: "2017-07-21T17:32:28Z"
-      endDate:
-        type: "string"
-        format: "date-time"
-        example: "2017-07-21T17:32:28Z"
     xml:
       name: "Scenario"
   ApiResponse:

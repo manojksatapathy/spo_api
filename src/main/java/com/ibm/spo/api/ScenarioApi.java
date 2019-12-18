@@ -33,7 +33,7 @@ import io.swagger.annotations.AuthorizationScope;
 @Api(description = "the scenario API")
 
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2019-10-29T08:10:34.116+05:30")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2019-11-25T14:54:20.504+05:30")
 
 
 public class ScenarioApi  {
